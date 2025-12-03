@@ -1,0 +1,46 @@
+{
+  "name": "git-recap",
+  "version": "0.1.0",
+  "description": "Generate marketing-ready year-in-review summaries of git contributions",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "git-recap": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "git",
+    "github",
+    "recap",
+    "year-in-review",
+    "developer",
+    "contributions",
+    "cli"
+  ],
+  "author": "glandais",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glandais/git-recap.git"
+  },
+  "homepage": "https://github.com/glandais/git-recap#readme",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "commander": "^12.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

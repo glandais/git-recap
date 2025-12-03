@@ -9,9 +9,7 @@ const program = new Command();
 
 program
   .name("git-recap")
-  .description(
-    "Generate marketing-ready year-in-review summaries of git contributions"
-  )
+  .description("Generate marketing-ready year-in-review summaries of git contributions")
   .version("0.1.0");
 
 // Add subcommands

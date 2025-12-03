@@ -31,6 +31,7 @@ git-recap fetch --year 2025 --github
 ```
 
 This creates a `recap-2025/` folder with:
+
 - `recap.json` - Metrics, repositories, and highlights
 - `commits/*.json` - Per-commit metadata
 - `commits/*.diff` - Per-commit diffs
@@ -42,6 +43,7 @@ git-recap process --input recap-2025
 ```
 
 This uses Claude to:
+
 1. Generate marketing-ready descriptions for each commit
 2. Create per-repository achievement summaries
 3. Synthesize top 5 achievements across all repos
@@ -65,6 +67,7 @@ git-recap generate --input recap-2025 --output recap.md
 ## Example Output
 
 ### Before AI Processing
+
 ```
 - retry without rootId
 - improve images
@@ -72,6 +75,7 @@ git-recap generate --input recap-2025 --output recap.md
 ```
 
 ### After AI Processing
+
 ```
 - **Launched Trouvaille platform from scratch**: Built complete full-stack application
   with backend/frontend foundation, OAuth authentication with PKCE, JWT support, and
@@ -121,7 +125,7 @@ interface RecapData {
     longestStreak: number;
     activeDays: number;
     topLanguages: Array<{ name: string; commits: number }>;
-    commitTypes?: { feat, fix, refactor, docs, chore, test, perf };
+    commitTypes?: { feat; fix; refactor; docs; chore; test; perf };
   };
   repositories: Array<{
     name: string;

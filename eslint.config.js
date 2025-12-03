@@ -1,6 +1,7 @@
 import eslint from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
+import prettier from "eslint-config-prettier";
 
 export default [
   eslint.configs.recommended,
@@ -12,6 +13,10 @@ export default [
         ecmaVersion: "latest",
         sourceType: "module",
       },
+      globals: {
+        console: "readonly",
+        process: "readonly",
+      },
     },
     plugins: {
       "@typescript-eslint": tseslint,
@@ -20,11 +25,17 @@ export default [
       ...tseslint.configs.recommended.rules,
       "@typescript-eslint/no-unused-vars": [
         "error",
-        { argsIgnorePattern: "^_" },
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+        },
       ],
+      "no-console": "off", // CLI tool uses console for user feedback
     },
   },
   {
     ignores: ["dist/**", "node_modules/**"],
   },
+  prettier, // Disable ESLint rules that conflict with Prettier
 ];

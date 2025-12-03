@@ -15,8 +15,6 @@ export function detectHighlights(data: RecapData): Highlights {
     newRepos: [],
   };
 
-  const username = data.meta.username.toLowerCase();
-
   // Detect major features (feat: commits with significant changes)
   highlights.majorFeatures = detectMajorFeatures(data.commits);
 
@@ -63,20 +61,15 @@ function detectMajorFeatures(commits: Commit[]): string[] {
   }
 
   // Find significant feature groups
-  for (const [scope, scopeCommits] of scopeGroups) {
-    const totalChanges = scopeCommits.reduce(
-      (sum, c) => sum + c.additions + c.deletions,
-      0
-    );
+  for (const [_scope, scopeCommits] of scopeGroups) {
+    const totalChanges = scopeCommits.reduce((sum, c) => sum + c.additions + c.deletions, 0);
 
     if (
       totalChanges >= LARGE_COMMIT_THRESHOLD ||
       scopeCommits.length >= HIGH_FEATURE_COUNT_THRESHOLD
     ) {
       // Use the first commit's message as the feature name
-      const firstMessage = scopeCommits[0].message
-        .replace(/^feat(\([^)]+\))?:\s*/i, "")
-        .trim();
+      const firstMessage = scopeCommits[0].message.replace(/^feat(\([^)]+\))?:\s*/i, "").trim();
       features.push(firstMessage);
     }
   }
@@ -85,9 +78,7 @@ function detectMajorFeatures(commits: Commit[]): string[] {
   for (const commit of featCommits) {
     const changes = commit.additions + commit.deletions;
     if (changes >= LARGE_COMMIT_THRESHOLD * 2) {
-      const message = commit.message
-        .replace(/^feat(\([^)]+\))?:\s*/i, "")
-        .trim();
+      const message = commit.message.replace(/^feat(\([^)]+\))?:\s*/i, "").trim();
       if (!features.includes(message)) {
         features.push(message);
       }
@@ -108,9 +99,7 @@ function detectSignificantRefactors(commits: Commit[]): string[] {
   for (const commit of refactorCommits) {
     const changes = commit.additions + commit.deletions;
     if (changes >= LARGE_COMMIT_THRESHOLD) {
-      const message = commit.message
-        .replace(/^refactor(\([^)]+\))?:\s*/i, "")
-        .trim();
+      const message = commit.message.replace(/^refactor(\([^)]+\))?:\s*/i, "").trim();
       refactors.push(message);
     }
   }

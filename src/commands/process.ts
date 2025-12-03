@@ -1,16 +1,9 @@
 import { Command } from "commander";
 import { readFileSync, writeFileSync, readdirSync, existsSync } from "fs";
 import { join } from "path";
-import {
-  RecapData,
-  CommitFile,
-  DiffExtraction,
-} from "../types/recap-data.js";
+import { RecapData, CommitFile } from "../types/recap-data.js";
 import { extractDiffInfo } from "../collectors/diff-extractor.js";
-import {
-  isClaudeAvailable,
-  generateAIHighlights,
-} from "../collectors/ai-highlights.js";
+import { isClaudeAvailable, generateAIHighlights } from "../collectors/ai-highlights.js";
 
 export interface ProcessOptions {
   input: string;
@@ -45,9 +38,7 @@ export const processCommand = new Command("process")
     console.log(`Processing commits from ${inputFolder}...`);
 
     // Load recap.json
-    const recapData: RecapData = JSON.parse(
-      readFileSync(recapPath, "utf-8")
-    );
+    const recapData: RecapData = JSON.parse(readFileSync(recapPath, "utf-8"));
 
     // Load and process commits
     const commitsFolder = join(inputFolder, "commits");
@@ -60,9 +51,7 @@ export const processCommand = new Command("process")
 
     // Group commits by repo
     const commitsByRepo = new Map<string, CommitFile[]>();
-    const commitFiles = readdirSync(commitsFolder).filter((f) =>
-      f.endsWith(".json")
-    );
+    const commitFiles = readdirSync(commitsFolder).filter((f) => f.endsWith(".json"));
 
     let processed = 0;
     for (const filename of commitFiles) {
@@ -71,9 +60,7 @@ export const processCommand = new Command("process")
       const diffPath = join(commitsFolder, `${sha}.diff`);
 
       // Load commit metadata
-      const commit: CommitFile = JSON.parse(
-        readFileSync(commitPath, "utf-8")
-      );
+      const commit: CommitFile = JSON.parse(readFileSync(commitPath, "utf-8"));
 
       // Extract diff info if diff exists
       if (existsSync(diffPath)) {
@@ -109,7 +96,7 @@ export const processCommand = new Command("process")
     // Save updated commit files with AI descriptions
     console.log("\nStep 3: Saving enhanced commit metadata...");
     let savedCount = 0;
-    for (const [_, commits] of commitsByRepo) {
+    for (const [_repo, commits] of commitsByRepo) {
       for (const commit of commits) {
         if (commit.aiDescription || commit.diffExtraction) {
           const commitPath = join(commitsFolder, `${commit.sha}.json`);
@@ -128,7 +115,5 @@ export const processCommand = new Command("process")
     for (const achievement of aiHighlights.topAchievements) {
       console.log(`  • ${achievement}`);
     }
-    console.log(
-      `\nNext step: git-recap generate --input ${inputFolder}`
-    );
+    console.log(`\nNext step: git-recap generate --input ${inputFolder}`);
   });

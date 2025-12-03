@@ -1,9 +1,4 @@
-import {
-  RecapData,
-  RecapMetrics,
-  CommitTypes,
-  LanguageStat,
-} from "../types/recap-data.js";
+import { RecapData, RecapMetrics, CommitTypes, LanguageStat } from "../types/recap-data.js";
 
 /**
  * Compute metrics from collected recap data
@@ -70,9 +65,10 @@ export function computeMetrics(data: RecapData): RecapMetrics {
 /**
  * Calculate active days and longest streak from commits
  */
-function calculateStreaks(
-  commits: RecapData["commits"]
-): { activeDays: number; longestStreak: number } {
+function calculateStreaks(commits: RecapData["commits"]): {
+  activeDays: number;
+  longestStreak: number;
+} {
   if (commits.length === 0) {
     return { activeDays: 0, longestStreak: 0 };
   }
@@ -97,9 +93,7 @@ function calculateStreaks(
     const currDate = new Date(sortedDates[i]);
 
     // Check if dates are consecutive
-    const diffDays = Math.floor(
-      (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
+    const diffDays = Math.floor((currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
       currentStreak++;

@@ -57,19 +57,14 @@ function extractFileTypes(files: string[]): string[] {
 /**
  * Extract function names from added lines
  */
-function extractFunctionsAdded(
-  addedLines: string[],
-  fileTypes: string[]
-): string[] {
+function extractFunctionsAdded(addedLines: string[], fileTypes: string[]): string[] {
   const functions: string[] = [];
 
   // Language-specific patterns
   const patterns: RegExp[] = [];
 
   // TypeScript/JavaScript
-  if (
-    fileTypes.some((t) => [".ts", ".tsx", ".js", ".jsx", ".mjs"].includes(t))
-  ) {
+  if (fileTypes.some((t) => [".ts", ".tsx", ".js", ".jsx", ".mjs"].includes(t))) {
     patterns.push(
       /(?:function|async function)\s+(\w+)\s*\(/g, // function foo()
       /(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?\(/g, // const foo = () =>
@@ -110,10 +105,7 @@ function extractFunctionsAdded(
       while ((match = pattern.exec(line)) !== null) {
         const name = match[1];
         // Filter out common false positives
-        if (
-          name &&
-          !["if", "for", "while", "switch", "catch", "return"].includes(name)
-        ) {
+        if (name && !["if", "for", "while", "switch", "catch", "return"].includes(name)) {
           functions.push(name);
         }
       }
@@ -127,34 +119,19 @@ function extractFunctionsAdded(
 /**
  * Extract class/interface names from added lines
  */
-function extractClassesAdded(
-  addedLines: string[],
-  fileTypes: string[]
-): string[] {
+function extractClassesAdded(addedLines: string[], fileTypes: string[]): string[] {
   const classes: string[] = [];
 
   const patterns: RegExp[] = [];
 
   // TypeScript/JavaScript
-  if (
-    fileTypes.some((t) => [".ts", ".tsx", ".js", ".jsx", ".mjs"].includes(t))
-  ) {
-    patterns.push(
-      /class\s+(\w+)/g,
-      /interface\s+(\w+)/g,
-      /type\s+(\w+)\s*=/g,
-      /enum\s+(\w+)/g
-    );
+  if (fileTypes.some((t) => [".ts", ".tsx", ".js", ".jsx", ".mjs"].includes(t))) {
+    patterns.push(/class\s+(\w+)/g, /interface\s+(\w+)/g, /type\s+(\w+)\s*=/g, /enum\s+(\w+)/g);
   }
 
   // Java
   if (fileTypes.some((t) => [".java"].includes(t))) {
-    patterns.push(
-      /class\s+(\w+)/g,
-      /interface\s+(\w+)/g,
-      /enum\s+(\w+)/g,
-      /@interface\s+(\w+)/g
-    );
+    patterns.push(/class\s+(\w+)/g, /interface\s+(\w+)/g, /enum\s+(\w+)/g, /@interface\s+(\w+)/g);
   }
 
   // Python
@@ -169,12 +146,7 @@ function extractClassesAdded(
 
   // Rust
   if (fileTypes.some((t) => [".rs"].includes(t))) {
-    patterns.push(
-      /struct\s+(\w+)/g,
-      /enum\s+(\w+)/g,
-      /trait\s+(\w+)/g,
-      /impl\s+(\w+)/g
-    );
+    patterns.push(/struct\s+(\w+)/g, /enum\s+(\w+)/g, /trait\s+(\w+)/g, /impl\s+(\w+)/g);
   }
 
   for (const line of addedLines) {
@@ -297,12 +269,8 @@ function detectAPI(files: string[], addedLines: string[]): boolean {
     /router\.(get|post|put|delete|patch)\s*\(/i, // Various routers
   ];
 
-  const hasApiFile = files.some((f) =>
-    apiFilePatterns.some((p) => p.test(f))
-  );
-  const hasApiCode = addedLines.some((line) =>
-    apiCodePatterns.some((p) => p.test(line))
-  );
+  const hasApiFile = files.some((f) => apiFilePatterns.some((p) => p.test(f)));
+  const hasApiCode = addedLines.some((line) => apiCodePatterns.some((p) => p.test(line)));
 
   return hasApiFile || hasApiCode;
 }

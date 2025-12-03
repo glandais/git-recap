@@ -102,7 +102,9 @@ POLISHED POST:`;
  */
 export function polishContent(content: string, format: "markdown" | "linkedin"): string {
   if (!isClaudeAvailable()) {
-    console.error("Claude CLI not available. Install with: npm install -g @anthropic-ai/claude-code");
+    console.error(
+      "Claude CLI not available. Install with: npm install -g @anthropic-ai/claude-code"
+    );
     return content;
   }
 

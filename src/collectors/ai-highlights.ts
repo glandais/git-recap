@@ -1,9 +1,5 @@
 import { execSync } from "child_process";
-import {
-  CommitFile,
-  DiffExtraction,
-  AIGeneratedHighlights,
-} from "../types/recap-data.js";
+import { CommitFile, AIGeneratedHighlights } from "../types/recap-data.js";
 import { formatDiffExtraction } from "./diff-extractor.js";
 
 const BATCH_SIZE = 15; // Commits per Claude call
@@ -126,10 +122,7 @@ Return JSON array like: [{"sha": "abc1234", "aiDescription": "Implemented X feat
     console.error(`  Error processing batch: ${error}`);
     // Fallback: use commit messages as descriptions
     for (const commit of commits) {
-      descriptions.set(
-        commit.sha.slice(0, 7),
-        commit.message.split("\n")[0]
-      );
+      descriptions.set(commit.sha.slice(0, 7), commit.message.split("\n")[0]);
     }
   }
 
@@ -139,10 +132,7 @@ Return JSON array like: [{"sha": "abc1234", "aiDescription": "Implemented X feat
 /**
  * Stage 2: Generate per-repo summary from AI-enhanced commits
  */
-export async function generateRepoSummary(
-  repo: string,
-  commits: CommitFile[]
-): Promise<string[]> {
+export async function generateRepoSummary(repo: string, commits: CommitFile[]): Promise<string[]> {
   if (commits.length === 0) return [];
 
   // Group by type
@@ -187,9 +177,7 @@ ${commitList}`;
   } catch (error) {
     console.error(`  Error generating repo summary for ${repo}: ${error}`);
     // Fallback: return top commit descriptions
-    return commits
-      .slice(0, 3)
-      .map((c) => c.aiDescription || c.message.split("\n")[0]);
+    return commits.slice(0, 3).map((c) => c.aiDescription || c.message.split("\n")[0]);
   }
 }
 
@@ -248,19 +236,12 @@ export async function generateAIHighlights(
   const repoSummaries = new Map<string, string[]>();
 
   // Filter to significant repos (>= 5 commits or >= 200 lines)
-  const significantRepos = Array.from(commitsByRepo.entries()).filter(
-    ([_, commits]) => {
-      const totalLines = commits.reduce(
-        (sum, c) => sum + c.additions + c.deletions,
-        0
-      );
-      return commits.length >= 5 || totalLines >= 200;
-    }
-  );
+  const significantRepos = Array.from(commitsByRepo.entries()).filter(([_, commits]) => {
+    const totalLines = commits.reduce((sum, c) => sum + c.additions + c.deletions, 0);
+    return commits.length >= 5 || totalLines >= 200;
+  });
 
-  console.log(
-    `  Processing ${significantRepos.length} significant repositories...`
-  );
+  console.log(`  Processing ${significantRepos.length} significant repositories...`);
 
   // Stage 1 & 2: Per-repo processing
   let repoIdx = 0;
@@ -273,15 +254,9 @@ export async function generateAIHighlights(
     }
 
     // Stage 1: Generate commit descriptions
-    const descriptions = await generateCommitDescriptions(
-      commits,
-      repo,
-      (current, total) => {
-        process.stdout.write(
-          `\r    Commits: ${current}/${total}                    `
-        );
-      }
-    );
+    const descriptions = await generateCommitDescriptions(commits, repo, (current, total) => {
+      process.stdout.write(`\r    Commits: ${current}/${total}                    `);
+    });
     console.log(""); // New line after progress
 
     // Update commits with AI descriptions

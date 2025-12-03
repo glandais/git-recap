@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { readFileSync, writeFileSync, existsSync, readdirSync } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { RecapData, CommitFile, CommitRef } from "../types/recap-data.js";
 import { formatMarkdown } from "../formatters/markdown.js";

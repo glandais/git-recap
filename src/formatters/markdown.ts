@@ -65,8 +65,7 @@ export function formatMarkdown(data: RecapData): string {
 
   // Highlights section
   const hasAIHighlights =
-    highlights.aiGenerated?.topAchievements &&
-    highlights.aiGenerated.topAchievements.length > 0;
+    highlights.aiGenerated?.topAchievements && highlights.aiGenerated.topAchievements.length > 0;
 
   const hasBasicHighlights =
     highlights.majorFeatures.length > 0 ||
@@ -117,9 +116,7 @@ export function formatMarkdown(data: RecapData): string {
     lines.push("");
     for (const repo of ownedRepos.slice(0, 10)) {
       const lang = repo.primaryLanguage ? ` (${repo.primaryLanguage})` : "";
-      lines.push(
-        `- [**${repo.name}**](${repo.url})${lang} - ${repo.commits} commits`
-      );
+      lines.push(`- [**${repo.name}**](${repo.url})${lang} - ${repo.commits} commits`);
     }
     lines.push("");
   }

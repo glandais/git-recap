@@ -2,11 +2,10 @@ import { execSync } from "child_process";
 import {
   RecapData,
   Repository,
-  Commit,
   CommitFile,
   createEmptyRecapData,
   parseCommitType,
-} from "../types/recap-data.js";
+} from "../types/recap-data.js"; // CommitFile is used, Commit is not needed
 
 /**
  * Execute a gh CLI command and return parsed JSON
@@ -34,22 +33,6 @@ function ghApiRaw(endpoint: string, headers: Record<string, string> = {}): strin
     encoding: "utf-8",
     maxBuffer: 50 * 1024 * 1024,
   });
-}
-
-/**
- * Execute a gh GraphQL query
- */
-function ghGraphQL<T>(query: string, variables: Record<string, unknown> = {}): T {
-  const variablesArg = Object.entries(variables)
-    .map(([key, value]) => `-F ${key}=${JSON.stringify(value)}`)
-    .join(" ");
-
-  const command = `gh api graphql -f query='${query.replace(/'/g, "'\\''")}' ${variablesArg}`;
-  const result = execSync(command, {
-    encoding: "utf-8",
-    maxBuffer: 50 * 1024 * 1024,
-  });
-  return JSON.parse(result) as T;
 }
 
 /**
@@ -126,12 +109,7 @@ export async function fetchGitHub(year: number): Promise<RecapData> {
       const repoDetails = ghApi<GitHubRepo>(`repos/${repoFullName}`);
 
       // Get commits by user in this repo for the year
-      const commits = await fetchCommitsForRepo(
-        repoFullName,
-        username,
-        startDate,
-        endDate
-      );
+      const commits = await fetchCommitsForRepo(repoFullName, username, startDate, endDate);
 
       if (commits.length === 0) continue;
 
@@ -201,7 +179,9 @@ async function findReposWithCommits(
         repos.add(fullName);
       }
 
-      console.log(`    Page ${page}: found ${result.items.length} commits, ${repos.size} unique repos so far`);
+      console.log(
+        `    Page ${page}: found ${result.items.length} commits, ${repos.size} unique repos so far`
+      );
 
       // Stop if we got less than a full page (no more results)
       if (result.items.length < perPage) break;
@@ -238,9 +218,7 @@ async function fetchCommitsForRepo(
       // Fetch stats for each commit (needed for additions/deletions)
       for (const commit of pageCommits) {
         try {
-          const commitDetails = ghApi<GitHubCommit>(
-            `repos/${repoFullName}/commits/${commit.sha}`
-          );
+          const commitDetails = ghApi<GitHubCommit>(`repos/${repoFullName}/commits/${commit.sha}`);
           commits.push(commitDetails);
         } catch {
           // If we can't get details, use basic info

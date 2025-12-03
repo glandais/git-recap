@@ -14,11 +14,7 @@ export interface FetchOptions {
 
 export const fetchCommand = new Command("fetch")
   .description("Fetch contribution data from GitHub and save to folder")
-  .option(
-    "--year <year>",
-    "Year to fetch data for",
-    String(new Date().getFullYear())
-  )
+  .option("--year <year>", "Year to fetch data for", String(new Date().getFullYear()))
   .option("--github", "Fetch from GitHub")
   .option("--output <folder>", "Output folder path")
   .action(async (options: FetchOptions) => {
@@ -89,10 +85,7 @@ export const fetchCommand = new Command("fetch")
       }
 
       // Save commit metadata
-      writeFileSync(
-        join(commitsFolder, `${commit.sha}.json`),
-        JSON.stringify(commitFile, null, 2)
-      );
+      writeFileSync(join(commitsFolder, `${commit.sha}.json`), JSON.stringify(commitFile, null, 2));
 
       // Add to refs
       commitRefs.push({
@@ -137,10 +130,7 @@ export const fetchCommand = new Command("fetch")
 /**
  * Compute metrics from commit files
  */
-function computeMetricsFromFiles(
-  commits: CommitFile[],
-  repositories: RecapData["repositories"]
-) {
+function computeMetricsFromFiles(commits: CommitFile[], repositories: RecapData["repositories"]) {
   // Reuse the existing metrics computation but with CommitFile data
   const fakeRecapData: RecapData = {
     meta: { year: 0, fetchedAt: "", sources: [], username: "" },

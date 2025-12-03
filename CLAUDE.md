@@ -42,6 +42,7 @@ git-recap generate --input recap-2025 [--format markdown|linkedin] [--output fil
 ## Key Patterns
 
 ### Three-Phase Architecture
+
 1. **fetch**: GitHub API → `recap-{year}/` folder (slow, API-bound)
 2. **process**: Claude AI → enhanced highlights (optional, AI-bound)
 3. **generate**: Formatters → stdout/file (fast, local)
@@ -49,11 +50,13 @@ git-recap generate --input recap-2025 [--format markdown|linkedin] [--output fil
 Each phase can be re-run independently.
 
 ### AI Summarization (3 stages)
+
 1. Per-commit: Generate marketing-ready description for each commit
 2. Per-repo: Summarize achievements for each repository
 3. Synthesis: Select top 5 achievements across all repos
 
 ### Data Flow
+
 ```
 recap-2025/
 ├── recap.json          # Metrics, repos, highlights (+ aiGenerated after process)

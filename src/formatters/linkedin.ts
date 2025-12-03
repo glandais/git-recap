@@ -7,7 +7,7 @@ const MAX_LINKEDIN_LENGTH = 3000;
  * Optimized for engagement and readability on LinkedIn
  */
 export function formatLinkedIn(data: RecapData): string {
-  const { meta, metrics, highlights } = data;
+  const { meta, metrics } = data;
 
   const lines: string[] = [];
 
